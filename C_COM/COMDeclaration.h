@@ -4,8 +4,8 @@
 /*
 * 组件查询类的接口
 */
-typedef HRESULT (__stdcall* PFN_ADDREF)(PVOID, size_t*);
-typedef HRESULT (__stdcall* PFN_DECREF)(PVOID, size_t*);
+typedef HRESULT (__stdcall* PFN_ADDREF)(PVOID,GUID, size_t*);
+typedef HRESULT (__stdcall* PFN_DECREF)(PVOID,GUID, size_t*);
 typedef HRESULT (__stdcall* PFN_QUERYINTERFACE)(PVOID, GUID, PVOID*);
 
 /*
@@ -22,6 +22,10 @@ typedef HRESULT(__stdcall* PFN_CRCR32)(PVOID, PBYTE, size_t, PDWORD);
 * Md5接口
 */
 typedef HRESULT(__stdcall* PDN_MD5)(PVOID, PBYTE, size_t, PBYTE);
+
+
+
+
 
 
 // {6BC27478-A935-46F2-98D2-9A518EF4A60F}

@@ -15,9 +15,11 @@ int main()
 
 	HMODULE hModule = NULL;
 	COMInterface* pCom = NULL;
+	COMInterface* pCom1 = NULL;
 	IFactory* ComFactory;
 	PFN_COMFACTORY pfn_Factory = NULL;
 	ICrc32* pCrc32 = NULL;
+	IMd5* pMd5 = NULL;
 	BYTE RawData[MAXBYTE];
 	BYTE ResData[MAXBYTE];
 	DWORD dwResCrc = 0;
@@ -41,12 +43,21 @@ int main()
 	
 	pCom->__vfptr->pfn_QueryInterface(pCom, s_iidCrc32, (PVOID*)&pCrc32);
 
+
+
 	pCrc32->__vfptr->pfn_Crc32(pCrc32, RawData, sizeof(RawData), &dwResCrc);
 
-	pCrc32->__vfptr->pfn_DecRef(pCrc32, NULL);
+	pCrc32->__vfptr->pfn_DecRef(pCrc32, s_iidCrc32, NULL);
 
-	pCom->__vfptr->pfn_DecRef(pCom, NULL);
+	pCom->__vfptr->pfn_DecRef(pCom,s_iidInterFace, NULL);
 
+	ComFactory->__vfptr->pfn_GetInstance((LPVOID*)&pCom1);
+	pCom1->__vfptr->pfn_QueryInterface(pCom1,s_iidMd5,(LPVOID*)&pMd5);
+	pMd5->__vfptr->pfn_Md5(pCrc32, RawData, sizeof(RawData), ResData);
+	pMd5->__vfptr->pfn_DecRef(pMd5,s_iidMd5, NULL);
+	pCom1->__vfptr->pfn_DecRef(pCom1, s_iidInterFace, NULL);
+
+	ComFactory->__vfptr->pfn_DecRef(ComFactory, s_iidFactory, NULL);
 
 
 	system("pause");

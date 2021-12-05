@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 
+
 typedef struct _AlgHash
 {
 	//COMInterface base;
@@ -16,8 +17,17 @@ typedef struct _AlgHash
 }AlgHash;
 
 
-HRESULT __stdcall AddRef(LPVOID pThis, size_t* pCount)
+HRESULT __stdcall AddRef(LPVOID pThis,GUID iidType, size_t* pCount)
 {
+	if (!memcmp(&iidType, &s_iidCrc32, sizeof(iidType)))
+	{
+		pThis = (LPVOID)((char*)pThis -(char*)((&((AlgHash*)NULL)->Crc32)));
+	}
+	else if (!memcmp(&iidType, &s_iidMd5, sizeof(iidType)))
+	{
+		pThis = (LPVOID)((char*)pThis - (char*)((&((AlgHash*)NULL)->MD5)));
+	}
+
 	size_t* pRefCount = &((AlgHash*)pThis)->nRefCount;
 	++(*pRefCount);
 	if (pCount)
@@ -26,8 +36,18 @@ HRESULT __stdcall AddRef(LPVOID pThis, size_t* pCount)
 	}
 	return ERROR_SUCCESS;
 }
-HRESULT __stdcall DecRef(LPVOID pThis, size_t* pCount)
+HRESULT __stdcall DecRef(LPVOID pThis, GUID iidType, size_t* pCount)
 {
+	if (!memcmp(&iidType, &s_iidCrc32, sizeof(iidType)))
+	{
+		pThis = (LPVOID)((char*)pThis - (char*)((&((AlgHash*)NULL)->Crc32)));
+	}
+	else if (!memcmp(&iidType, &s_iidMd5, sizeof(iidType)))
+	{
+		pThis = (LPVOID)((char*)pThis - (char*)((&((AlgHash*)NULL)->MD5)));
+	}
+
+
 	size_t* pRefCount = &((AlgHash*)pThis)->nRefCount;
 	--(*pRefCount);
 	if (!(*pRefCount))
@@ -41,7 +61,7 @@ HRESULT __stdcall DecRef(LPVOID pThis, size_t* pCount)
 	return ERROR_SUCCESS;
 }
 
-HRESULT __stdcall Crc32(LPVOID pThis, PBYTE pRaw, size_t nLen, PDWORD pRes)
+HRESULT __stdcall Hash_Crc32(LPVOID pThis, PBYTE pRaw, size_t nLen, PDWORD pRes)
 {
 	if (pRaw == NULL || nLen < 0 || pRes == NULL)
 	{
@@ -52,7 +72,7 @@ HRESULT __stdcall Crc32(LPVOID pThis, PBYTE pRaw, size_t nLen, PDWORD pRes)
 	return ERROR_SUCCESS;
 }
 
-HRESULT __stdcall Md5(LPVOID pThis, PBYTE pRaw, size_t nLen, PBYTE pRes)
+HRESULT __stdcall Hash_Md5(LPVOID pThis, PBYTE pRaw, size_t nLen, PBYTE pRes)
 {
 	if (pRaw == NULL || nLen < 0 || pRes == NULL)
 	{
@@ -83,7 +103,7 @@ HRESULT __stdcall Hash_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface
 		return E_NOTIMPL;
 	}
 	//引用计数+1
-	pHash->Crc32.__vfptr->pfn_AddRef(pHash, NULL);
+	pHash->Crc32.__vfptr->pfn_AddRef(pHash,s_iidCrc32, NULL);
 
 	return ERROR_SUCCESS;
 }
@@ -101,7 +121,7 @@ static const ICrc32_vfptr s_ICrc32_vfptr =
 	&AddRef,
 	& DecRef,
 	& Hash_QueryInterface,
-	&Crc32
+	&Hash_Crc32
 };
 
 static const IMd5_vfptr s_IMd5_vfptr =
@@ -109,7 +129,7 @@ static const IMd5_vfptr s_IMd5_vfptr =
 	&AddRef,
 	& DecRef,
 	& Hash_QueryInterface,
-	&Md5
+	& Hash_Md5
 };
 
 void InitAlgHashClass(LPVOID pThis)
@@ -131,7 +151,7 @@ typedef struct _CHashFactory
 	size_t nRefCount;
 }CHashFactory;
 
-HRESULT __stdcall HashFactory_AddRef(LPVOID pThis, size_t* pCount)
+HRESULT __stdcall HashFactory_AddRef(LPVOID pThis,GUID iidType, size_t* pCount)
 {
 	size_t* pRefCount = &((CHashFactory*)pThis)->nRefCount;
 
@@ -142,7 +162,7 @@ HRESULT __stdcall HashFactory_AddRef(LPVOID pThis, size_t* pCount)
 	}
 	return ERROR_SUCCESS;
 }
-HRESULT __stdcall HashFactory_DecRef(LPVOID pThis, size_t* pCount)
+HRESULT __stdcall HashFactory_DecRef(LPVOID pThis, GUID iidType, size_t* pCount)
 {
 	size_t* pRefCount = &((CHashFactory*)pThis)->nRefCount;
 	--(*pRefCount);
@@ -168,8 +188,8 @@ HRESULT __stdcall GetHashInstance(LPVOID* pInstance)
 		return E_OUTOFMEMORY;
 	}
 	InitAlgHashClass(*pInstance);
-	((AlgHash*)*pInstance)->Crc32.__vfptr->pfn_AddRef(*pInstance, NULL);
-	//((AlgHash*)*pInstance)->base.__vfptr->pfn_AddRef(*pInstance, NULL);
+	((AlgHash*)*pInstance)->Crc32.__vfptr->pfn_AddRef(*pInstance, s_iidCrc32, NULL);
+	
 	return ERROR_SUCCESS;
 }
 HRESULT __stdcall Factory_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)
@@ -189,7 +209,7 @@ HRESULT __stdcall Factory_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterf
 		return E_NOTIMPL;
 	}
 	//引用计数+1
-	pFactory->factory.__vfptr->pfn_AddRef(pFactory,NULL);
+	pFactory->factory.__vfptr->pfn_AddRef(pFactory,s_iidFactory,NULL);
 	return ERROR_SUCCESS;
 }
 
@@ -206,6 +226,7 @@ void InitHashFactoryCalss(LPVOID pThis)
 {
 	CHashFactory* pHash = (CHashFactory*)pThis;
 	pHash->factory.__vfptr = &s_HashFactory_vfptr;
+	pHash->nRefCount = 0;
 }
 
 
@@ -217,7 +238,12 @@ HRESULT __stdcall GetCOMFactory(LPVOID* pObj)
 		return E_INVALIDARG;
 	}
 	*pObj = malloc(sizeof(CHashFactory));
+	if (!*pObj)
+	{
+		return E_OUTOFMEMORY;
+	}
 	InitHashFactoryCalss(*pObj);
+	((CHashFactory*)*pObj)->factory.__vfptr->pfn_AddRef(*pObj,s_iidFactory, NULL);
 
 	return ERROR_SUCCESS;
 }

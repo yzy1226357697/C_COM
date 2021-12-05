@@ -16,6 +16,21 @@ typedef struct _COMInterface
 }COMInterface;
 
 
+
+typedef struct 
+{
+	PFN_ADDREF pfn_AddRef;
+	PFN_DECREF pfn_DecRef;
+	PFN_QUERYINTERFACE pfn_QueryInterface;
+	PFN_GETINSTANCE pfn_GetInstance;
+}IFACTORY_vfptr;
+typedef struct _IFactory
+{
+	const IFACTORY_vfptr* __vfptr;
+}IFactory;
+
+
+
 typedef struct 
 {
 	PFN_CRCR32 pfn_Crc32;

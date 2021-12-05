@@ -16,9 +16,6 @@ typedef struct _AlgHash
 }AlgHash;
 
 
-
-
-
 HRESULT __stdcall AddRef(LPVOID pThis, size_t* pCount)
 {
 	size_t* pRefCount = &((AlgHash*)pThis)->nRefCount;
@@ -65,7 +62,7 @@ HRESULT __stdcall Md5(LPVOID pThis, PBYTE pRaw, size_t nLen, PBYTE pRes)
 
 	return ERROR_SUCCESS;
 }
-HRESULT __stdcall QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)
+HRESULT __stdcall Hash_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)
 {
 	AlgHash* pHash = pThis;
 	if (!memcmp(&iid, &s_iidInterFace, sizeof(iid)))
@@ -85,15 +82,17 @@ HRESULT __stdcall QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)
 	{
 		return E_NOTIMPL;
 	}
+	//引用计数+1
+	pHash->base.__vfptr->pfn_AddRef(pHash,NULL);
 	return ERROR_SUCCESS;
 }
 
 
-static const COMInterface_vfptr s_COMInterface_vfptr =
+static const COMInterface_vfptr s_COMInterface_Hash_vfptr =
 {
 	&AddRef,
 	& DecRef,
-	& QueryInterface
+	& Hash_QueryInterface
 };
 
 static const ICrc32_vfptr s_ICrc32_vfptr =
@@ -109,25 +108,108 @@ static const IMd5_vfptr s_IMd5_vfptr =
 void InitAlgHashClass(LPVOID pThis)
 {
 	AlgHash* pHash = pThis;
-	pHash->base.__vfptr = &s_COMInterface_vfptr;
+	pHash->base.__vfptr = &s_COMInterface_Hash_vfptr;
 	pHash->Crc32.__vfptr = &s_ICrc32_vfptr;
 	pHash->MD5.__vfptr = &s_IMd5_vfptr;
 	pHash->nRefCount = 0;
 
 }
 
-HRESULT __stdcall GetCOMObject(LPVOID* pObj)
+
+
+
+typedef struct _CHashFactory
+{
+	IFactory factory;
+	size_t nRefCount;
+}CHashFactory;
+
+HRESULT __stdcall HashFactory_AddRef(LPVOID pThis, size_t* pCount)
+{
+	size_t* pRefCount = &((CHashFactory*)pThis)->nRefCount;
+
+	++(*pRefCount);
+	if (pCount)
+	{
+		*pCount = *pRefCount;
+	}
+	return ERROR_SUCCESS;
+}
+HRESULT __stdcall HashFactory_DecRef(LPVOID pThis, size_t* pCount)
+{
+	size_t* pRefCount = &((CHashFactory*)pThis)->nRefCount;
+	--(*pRefCount);
+	if (!(*pRefCount))
+	{
+		free(pThis);
+	}
+	if (pCount)
+	{
+		*pCount = *pRefCount;
+	}
+	return ERROR_SUCCESS;
+}
+HRESULT __stdcall GetHashInstance(LPVOID* pInstance)
+{
+	if (!pInstance)
+	{
+		return E_INVALIDARG;
+	}
+	*pInstance = malloc(sizeof(AlgHash));
+	if (!*pInstance)
+	{
+		return E_OUTOFMEMORY;
+	}
+	InitAlgHashClass(*pInstance);
+	((AlgHash*)*pInstance)->base.__vfptr->pfn_AddRef(*pInstance, NULL);
+	return ERROR_SUCCESS;
+}
+HRESULT __stdcall Factory_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)
+{
+	CHashFactory* pFactory = pThis;
+	if (!memcmp(&iid, &s_iidInterFace, sizeof(iid)))
+	{
+		*pInterface = pThis;
+	}
+
+	else if (!memcmp(&iid, &s_iidFactory, sizeof(iid)))
+	{
+		*pInterface = pFactory;
+	}
+	else
+	{
+		return E_NOTIMPL;
+	}
+	//引用计数+1
+	pFactory->factory.__vfptr->pfn_AddRef(pFactory,NULL);
+	return ERROR_SUCCESS;
+}
+
+static const IFACTORY_vfptr s_HashFactory_vfptr = {
+	& HashFactory_AddRef,
+	& HashFactory_DecRef,
+	& Hash_QueryInterface,
+	& GetHashInstance
+};
+
+
+
+void InitHashFactoryCalss(LPVOID pThis)
+{
+	CHashFactory* pHash = (CHashFactory*)pThis;
+	pHash->factory.__vfptr = &s_HashFactory_vfptr;
+}
+
+
+
+HRESULT __stdcall GetCOMFactory(LPVOID* pObj)
 {
 	if (!pObj)
 	{
 		return E_INVALIDARG;
 	}
-	*pObj = malloc(sizeof(AlgHash));
-	if (!*pObj)
-	{
-		return E_OUTOFMEMORY;
-	}
-	InitAlgHashClass(*pObj);
+	*pObj = malloc(sizeof(CHashFactory));
+	InitHashFactoryCalss(*pObj);
 
 	return ERROR_SUCCESS;
 }

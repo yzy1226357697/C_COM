@@ -11,11 +11,12 @@
 
 int main()
 {
-	typedef HRESULT(__stdcall* PFN_COMDOBJ)(LPVOID*);
+	typedef HRESULT(__stdcall* PFN_COMFACTORY)(LPVOID*);
 
 	HMODULE hModule = NULL;
 	COMInterface* pCom = NULL;
-	PFN_COMDOBJ pfn_Obj = NULL;
+	IFactory* ComFactory;
+	PFN_COMFACTORY pfn_Factory = NULL;
 	ICrc32* pCrc32 = NULL;
 	BYTE RawData[MAXBYTE];
 	BYTE ResData[MAXBYTE];
@@ -31,16 +32,20 @@ int main()
 	}
 	
 	
-	pfn_Obj = (PFN_COMDOBJ)GetProcAddress(hModule, "GetCOMObject");
+	pfn_Factory = (PFN_COMFACTORY)GetProcAddress(hModule, "GetCOMFactory");
 
 	
-	pfn_Obj((LPVOID*)&pCom);
+	pfn_Factory((LPVOID*)&ComFactory);
+	ComFactory->__vfptr->pfn_GetInstance((LPVOID*)&pCom);
 
 	
 	pCom->__vfptr->pfn_QueryInterface(pCom, s_iidCrc32, (PVOID*)&pCrc32);
 
-
 	pCrc32->__vfptr->pfn_Crc32(pCrc32, RawData, sizeof(RawData), &dwResCrc);
+	pCom->__vfptr->pfn_DecRef(pCom, NULL);
+
+	pCom->__vfptr->pfn_DecRef(pCom, NULL);
+
 
 
 	system("pause");

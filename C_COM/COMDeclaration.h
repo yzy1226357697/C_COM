@@ -9,6 +9,11 @@ typedef HRESULT (__stdcall* PFN_DECREF)(PVOID, size_t*);
 typedef HRESULT (__stdcall* PFN_QUERYINTERFACE)(PVOID, GUID, PVOID*);
 
 /*
+* 类工厂组件
+*/
+typedef HRESULT(__stdcall* PFN_GETINSTANCE)(LPVOID*);
+
+/*
 * Crc32接口
 */
 typedef HRESULT(__stdcall* PFN_CRCR32)(PVOID, PBYTE, size_t, PDWORD);
@@ -30,4 +35,10 @@ static const GUID s_iidMd5 =
 // {3C342390-F541-435D-B497-7E2CC1909ED4}
 static const GUID s_iidCrc32 =
 { 0x3c342390, 0xf541, 0x435d, { 0xb4, 0x97, 0x7e, 0x2c, 0xc1, 0x90, 0x9e, 0xd4 } };
+
+
+// {1EE8A5B4-2A1F-490C-B9D2-789E5502B9FA}
+static const GUID s_iidFactory =
+{ 0x1ee8a5b4, 0x2a1f, 0x490c, { 0xb9, 0xd2, 0x78, 0x9e, 0x55, 0x2, 0xb9, 0xfa } };
+
 

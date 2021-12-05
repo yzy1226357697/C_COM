@@ -7,7 +7,7 @@
 
 typedef struct _AlgHash
 {
-	COMInterface base;
+	//COMInterface base;
 	ICrc32 Crc32;
 	IMd5 MD5;
 
@@ -83,7 +83,8 @@ HRESULT __stdcall Hash_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface
 		return E_NOTIMPL;
 	}
 	//引用计数+1
-	pHash->base.__vfptr->pfn_AddRef(pHash,NULL);
+	pHash->Crc32.__vfptr->pfn_AddRef(pHash, NULL);
+
 	return ERROR_SUCCESS;
 }
 
@@ -97,18 +98,24 @@ static const COMInterface_vfptr s_COMInterface_Hash_vfptr =
 
 static const ICrc32_vfptr s_ICrc32_vfptr =
 {
+	&AddRef,
+	& DecRef,
+	& Hash_QueryInterface,
 	&Crc32
 };
 
 static const IMd5_vfptr s_IMd5_vfptr =
 {
+	&AddRef,
+	& DecRef,
+	& Hash_QueryInterface,
 	&Md5
 };
 
 void InitAlgHashClass(LPVOID pThis)
 {
 	AlgHash* pHash = pThis;
-	pHash->base.__vfptr = &s_COMInterface_Hash_vfptr;
+	//pHash->base.__vfptr = &s_COMInterface_Hash_vfptr;
 	pHash->Crc32.__vfptr = &s_ICrc32_vfptr;
 	pHash->MD5.__vfptr = &s_IMd5_vfptr;
 	pHash->nRefCount = 0;
@@ -161,7 +168,8 @@ HRESULT __stdcall GetHashInstance(LPVOID* pInstance)
 		return E_OUTOFMEMORY;
 	}
 	InitAlgHashClass(*pInstance);
-	((AlgHash*)*pInstance)->base.__vfptr->pfn_AddRef(*pInstance, NULL);
+	((AlgHash*)*pInstance)->Crc32.__vfptr->pfn_AddRef(*pInstance, NULL);
+	//((AlgHash*)*pInstance)->base.__vfptr->pfn_AddRef(*pInstance, NULL);
 	return ERROR_SUCCESS;
 }
 HRESULT __stdcall Factory_QueryInterface(LPVOID pThis, GUID iid, LPVOID* pInterface)

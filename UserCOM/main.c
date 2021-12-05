@@ -42,7 +42,8 @@ int main()
 	pCom->__vfptr->pfn_QueryInterface(pCom, s_iidCrc32, (PVOID*)&pCrc32);
 
 	pCrc32->__vfptr->pfn_Crc32(pCrc32, RawData, sizeof(RawData), &dwResCrc);
-	pCom->__vfptr->pfn_DecRef(pCom, NULL);
+
+	pCrc32->__vfptr->pfn_DecRef(pCrc32, NULL);
 
 	pCom->__vfptr->pfn_DecRef(pCom, NULL);
 

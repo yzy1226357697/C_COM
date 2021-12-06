@@ -7,6 +7,7 @@ typedef  struct
 	PFN_ADDREF pfn_AddRef;
 	PFN_DECREF pfn_DecRef;
 	PFN_QUERYINTERFACE pfn_QueryInterface;
+<<<<<<< HEAD
 }COMInterface_vfptr;
 
 typedef struct _COMInterface
@@ -14,6 +15,15 @@ typedef struct _COMInterface
 	const COMInterface_vfptr* __vfptr;
 
 }COMInterface;
+=======
+}IMyUnknown_vfptr;
+
+typedef struct _IMyUnknown
+{
+	const IMyUnknown_vfptr* __vfptr;
+
+}IMyUnknown;
+>>>>>>> c6e920d (修改子类this指针)
 
 
 

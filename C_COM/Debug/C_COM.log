@@ -1,2 +1,6 @@
 ﻿  dllmain.c
+<<<<<<< HEAD
   C_COM.vcxproj -> C:\Users\路人甲\Desktop\TestCode\课程练习\作业模拟\C_COM\Debug\C_COM.dll
+=======
+  C_COM.vcxproj -> C:\Users\路人甲\Desktop\当天作业\作业\C_COM\Debug\C_COM.dll
+>>>>>>> c6e920d (修改子类this指针)

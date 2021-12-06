@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\c_com.pch
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\vc142.pdb
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\vc142.idb
@@ -12,3 +13,23 @@ c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\c_com.tlog\link.command.1.tlog
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\c_com.tlog\link.read.1.tlog
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\c_com\debug\c_com.tlog\link.write.1.tlog
+=======
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.pch
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\vc142.pdb
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\vc142.idb
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\pch.obj
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\dllmain.obj
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\interface.obj
+c:\users\路人甲\desktop\当天作业\作业\c_com\debug\c_com.lib
+c:\users\路人甲\desktop\当天作业\作业\c_com\debug\c_com.exp
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.ilk
+c:\users\路人甲\desktop\当天作业\作业\c_com\debug\c_com.dll
+c:\users\路人甲\desktop\当天作业\作业\c_com\debug\c_com.pdb
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\cl.command.1.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\cl.read.1.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\cl.write.1.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\c_com.write.1u.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\link.command.1.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\link.read.1.tlog
+c:\users\路人甲\desktop\当天作业\作业\c_com\c_com\debug\c_com.tlog\link.write.1.tlog
+>>>>>>> c6e920d (修改子类this指针)

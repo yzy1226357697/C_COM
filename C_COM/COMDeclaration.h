@@ -4,8 +4,13 @@
 /*
 * 组件查询类的接口
 */
+<<<<<<< HEAD
 typedef HRESULT (__stdcall* PFN_ADDREF)(PVOID,GUID, size_t*);
 typedef HRESULT (__stdcall* PFN_DECREF)(PVOID,GUID, size_t*);
+=======
+typedef HRESULT (__stdcall* PFN_ADDREF)(PVOID, size_t*);
+typedef HRESULT (__stdcall* PFN_DECREF)(PVOID, size_t*);
+>>>>>>> c6e920d (淇敼瀛愮被this鎸囬拡)
 typedef HRESULT (__stdcall* PFN_QUERYINTERFACE)(PVOID, GUID, PVOID*);
 
 /*

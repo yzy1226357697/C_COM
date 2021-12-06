@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\vc142.pdb
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\vc142.idb
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\main.obj
@@ -10,3 +11,8 @@ c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debu
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\usercom.tlog\link.command.1.tlog
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\usercom.tlog\link.read.1.tlog
 c:\users\路人甲\desktop\testcode\课程练习\作业模拟\c_com\usercom\debug\usercom.tlog\link.write.1.tlog
+=======
+c:\users\路人甲\desktop\当天作业\作业\c_com\usercom\debug\vc142.idb
+c:\users\路人甲\desktop\当天作业\作业\c_com\usercom\debug\vc142.pdb
+c:\users\路人甲\desktop\当天作业\作业\c_com\usercom\debug\usercom.tlog\cl.command.1.tlog
+>>>>>>> c6e920d (修改子类this指针)

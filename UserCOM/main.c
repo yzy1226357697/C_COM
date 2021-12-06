@@ -14,8 +14,13 @@ int main()
 	typedef HRESULT(__stdcall* PFN_COMFACTORY)(LPVOID*);
 
 	HMODULE hModule = NULL;
+<<<<<<< HEAD
 	COMInterface* pCom = NULL;
 	COMInterface* pCom1 = NULL;
+=======
+	IMyUnknown* pCom = NULL;
+	IMyUnknown* pCom1 = NULL;
+>>>>>>> c6e920d (修改子类this指针)
 	IFactory* ComFactory;
 	PFN_COMFACTORY pfn_Factory = NULL;
 	ICrc32* pCrc32 = NULL;
@@ -38,26 +43,48 @@ int main()
 
 	
 	pfn_Factory((LPVOID*)&ComFactory);
+<<<<<<< HEAD
 	ComFactory->__vfptr->pfn_GetInstance((LPVOID*)&pCom);
 
 	
+=======
+
+
+	ComFactory->__vfptr->pfn_GetInstance((LPVOID*)&pCom);
+>>>>>>> c6e920d (修改子类this指针)
 	pCom->__vfptr->pfn_QueryInterface(pCom, s_iidCrc32, (PVOID*)&pCrc32);
 
 
 
+<<<<<<< HEAD
 	pCrc32->__vfptr->pfn_Crc32(pCrc32, RawData, sizeof(RawData), &dwResCrc);
 
 	pCrc32->__vfptr->pfn_DecRef(pCrc32, s_iidCrc32, NULL);
 
 	pCom->__vfptr->pfn_DecRef(pCom,s_iidInterFace, NULL);
+=======
+
+	pCrc32->__vfptr->pfn_Crc32(pCrc32, RawData, sizeof(RawData), &dwResCrc);
+
+	pCrc32->__vfptr->pfn_DecRef(pCrc32, NULL);
+
+	pCom->__vfptr->pfn_DecRef(pCom, NULL);
+>>>>>>> c6e920d (修改子类this指针)
 
 	ComFactory->__vfptr->pfn_GetInstance((LPVOID*)&pCom1);
 	pCom1->__vfptr->pfn_QueryInterface(pCom1,s_iidMd5,(LPVOID*)&pMd5);
 	pMd5->__vfptr->pfn_Md5(pCrc32, RawData, sizeof(RawData), ResData);
+<<<<<<< HEAD
 	pMd5->__vfptr->pfn_DecRef(pMd5,s_iidMd5, NULL);
 	pCom1->__vfptr->pfn_DecRef(pCom1, s_iidInterFace, NULL);
 
 	ComFactory->__vfptr->pfn_DecRef(ComFactory, s_iidFactory, NULL);
+=======
+	pMd5->__vfptr->pfn_DecRef(pMd5, NULL);
+	pCom1->__vfptr->pfn_DecRef(pCom1, NULL);
+
+	ComFactory->__vfptr->pfn_DecRef(ComFactory, NULL);
+>>>>>>> c6e920d (修改子类this指针)
 
 
 	system("pause");
